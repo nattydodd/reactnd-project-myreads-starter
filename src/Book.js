@@ -13,7 +13,7 @@ class Book extends Component {
   }
 
   render() {
-    const { book, updateBook } = this.props;
+    const { book } = this.props;
 
     const options = [
       {
