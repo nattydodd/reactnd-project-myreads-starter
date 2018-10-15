@@ -7,7 +7,8 @@ class Search extends Component {
 
   state = {
     term: '',
-    results: []
+    results: [],
+    isSearching: false
   }
 
   constructor(props) {
@@ -19,11 +20,14 @@ class Search extends Component {
 
   handleChange(e) {
     this.setState({
-      term: e.target.value
+      term: e.target.value,
+      isSearching: true
     });
+
     BooksAPI.search(e.target.value).then(response => {
       this.setState({
-        results: response
+        results: !response || response.error ? [] : response,
+        isSearching: false
       });
     });
   }
@@ -57,13 +61,23 @@ class Search extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.results && this.state.results.map(book => (
-              <Book
-                book={book}
-                key={book.title}
-                updateBook={this.updateBook}
-              />
-            ))}
+            {this.state.isSearching ?
+              <h1>Searching...</h1> :
+              (this.state.results.length > 0 ?
+                this.state.results.map(book => (
+                  <Book
+                    book={book}
+                    key={book.id}
+                    updateBook={this.updateBook}
+                  />
+                )) :
+                this.state.results.length === 0 ?
+                  this.state.term === "" ?
+                    <h1>Please enter your search query</h1> :
+                    <h1>No Results. Please Try Again</h1>
+                : ''
+              )
+            }
           </ol>
         </div>
       </div>
