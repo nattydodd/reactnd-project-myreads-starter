@@ -22,7 +22,7 @@ class Shelf extends Component {
   }
 
   render() {
-    const { title, books } = this.props;
+    const { title, books, shelf } = this.props;
 
     return (
       <div className="bookshelf">
@@ -36,6 +36,7 @@ class Shelf extends Component {
                 book={book}
                 key={book.title}
                 updateBook={this.updateBook}
+                shelf={shelf}
               />
             ))}
           </ol>

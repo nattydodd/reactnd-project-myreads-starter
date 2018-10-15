@@ -37,10 +37,7 @@ class Search extends Component {
       return;
     }
 
-    BooksAPI.update(book, value)
-      .then((response) => {
-        console.log(response);
-      });
+    BooksAPI.update(book, value);
   }
 
   render() {
@@ -69,6 +66,7 @@ class Search extends Component {
                     book={book}
                     key={book.id}
                     updateBook={this.updateBook}
+                    shelf='move'
                   />
                 )) :
                 this.state.results.length === 0 ?

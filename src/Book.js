@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 
 class Book extends Component {
 
+  state = {
+    shelf: this.props.shelf
+  }
+
   constructor(props) {
     super(props);
 
@@ -9,6 +13,9 @@ class Book extends Component {
   }
 
   handleChange(e) {
+    this.setState({
+      shelf: e.target.value
+    })
     this.props.updateBook(e.target.value, this.props.book);
   }
 
@@ -38,10 +45,16 @@ class Book extends Component {
       <li>
         <div className="book">
           <div className="book-top">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+            <div className="book-cover"
+              style={{
+                width: 128,
+                height: 193,
+                backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})`
+              }}>
+            </div>
             <div className="book-shelf-changer">
               <select
-                value={book.shelf}
+                value={this.state.shelf}
                 onChange={this.handleChange}
               >
                 <option value="move" disabled>Move to...</option>
