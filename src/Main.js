@@ -1,26 +1,35 @@
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import Shelf from './Shelf';
-import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI';
 
 class Main extends Component {
   state = {}
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+
+    this.fetchBooks = this.fetchBooks.bind(this);
+  }
+
+  fetchBooks() {
     BooksAPI.getAll().then((response) => {
       console.log(response);
 
       this.setState({
         shelves: [
           {
+            shelf: 'currentlyReading',
             title: 'Currently Reading',
             books: response.filter(book => book.shelf === 'currentlyReading')
           },
           {
+            shelf: 'wantToRead',
             title: 'Want to Read',
             books: response.filter(book => book.shelf === 'wantToRead')
           },
           {
+            shelf: 'read',
             title: 'Read',
             books: response.filter(book => book.shelf === 'read')
           }
@@ -29,6 +38,9 @@ class Main extends Component {
     });
   }
 
+  componentDidMount() {
+    this.fetchBooks();
+  }
 
   render() {
     return (
@@ -42,7 +54,9 @@ class Main extends Component {
               <Shelf
                 title={shelf.title}
                 books={shelf.books}
+                shelf={shelf.shelf}
                 key={shelf.title}
+                fetchBooks={this.fetchBooks}
               />
             ))}
           </div>

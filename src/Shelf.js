@@ -1,7 +1,25 @@
 import React, { Component } from 'react';
 import Book from './Book';
+import * as BooksAPI from './BooksAPI';
 
 class Shelf extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.updateBook = this.updateBook.bind(this);
+  }
+
+  updateBook(value, book) {
+    if (book.shelf === value) {
+      return;
+    }
+
+    BooksAPI.update(book, value)
+      .then(() => {
+        this.props.fetchBooks();
+      });
+  }
 
   render() {
     const { title, books } = this.props;
@@ -17,6 +35,7 @@ class Shelf extends Component {
               <Book
                 book={book}
                 key={book.title}
+                updateBook={this.updateBook}
               />
             ))}
           </ol>
