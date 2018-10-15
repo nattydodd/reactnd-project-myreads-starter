@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import * as BooksAPI from './BooksAPI';
 
 class Book extends Component {
 
   state = {
-    shelf: this.props.shelf
+    shelf: this.props.shelf,
   }
+
+  // used below to clear memory leaks in BooksAPI.get
+  mounted = false;
 
   constructor(props) {
     super(props);
@@ -17,6 +21,24 @@ class Book extends Component {
       shelf: e.target.value
     })
     this.props.updateBook(e.target.value, this.props.book);
+  }
+
+  componentDidMount() {
+    this.mounted = true;
+
+    BooksAPI.get(this.props.book.id).then(response => {
+      if (response.shelf && this.mounted) {
+        this.setState({
+          shelf: response.shelf
+        });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    // stop the async task of book fetching from
+    // trying to setState on an Unmounted component
+    this.mounted = false;
   }
 
   render() {

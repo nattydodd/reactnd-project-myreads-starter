@@ -14,7 +14,6 @@ class Main extends Component {
 
   fetchBooks() {
     BooksAPI.getAll().then((response) => {
-      console.log(response);
 
       this.setState({
         shelves: [
