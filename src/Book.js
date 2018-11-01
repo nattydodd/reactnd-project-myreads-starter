@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import * as BooksAPI from './BooksAPI';
+import PropTypes from 'prop-types';
+import titleCase from './helpers/titleCase';
 
 class Book extends Component {
 
@@ -7,7 +9,7 @@ class Book extends Component {
     shelf: this.props.shelf,
   }
 
-  // used below to clear memory leaks in BooksAPI.get
+  // this is used to clear memory leaks in BooksAPI.get
   mounted = false;
 
   constructor(props) {
@@ -45,23 +47,11 @@ class Book extends Component {
     const { book } = this.props;
 
     const options = [
-      {
-        name: 'Currently Reading',
-        value: 'currentlyReading'
-      },
-      {
-        name: 'Want to Read',
-        value: 'wantToRead'
-      },
-      {
-        name: 'Read',
-        value: 'read'
-      },
-      {
-        name: 'None',
-        value: 'none'
-      }
-    ]
+      'currentlyReading',
+      'wantToRead',
+      'read',
+      'none'
+    ];
 
     return (
       <li>
@@ -82,10 +72,10 @@ class Book extends Component {
                 <option value="move" disabled>Move to...</option>
                 {options.map(option => (
                   <option
-                    value={option.value}
-                    key={option.value}
+                    value={option}
+                    key={option}
                   >
-                    {option.name}
+                    {titleCase(option)}
                   </option>
                 ))}
               </select>
@@ -97,6 +87,12 @@ class Book extends Component {
       </li>
     )
   }
+}
+
+Book.propTypes = {
+  book: PropTypes.object.isRequired,
+  updateBook: PropTypes.func.isRequired,
+  shelf: PropTypes.string.isRequired
 }
 
 export default Book;

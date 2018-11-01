@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import Shelf from './Shelf';
 import * as BooksAPI from './BooksAPI';
+import titleCase from './helpers/titleCase';
 
 class Main extends Component {
   state = {}
@@ -14,26 +15,13 @@ class Main extends Component {
 
   fetchBooks() {
     BooksAPI.getAll().then((response) => {
+      const shelves = ['currentlyReading', 'wantToRead', 'read'].map(shelf => ({
+        shelf: shelf,
+        title: titleCase(shelf),
+        books: response.filter(book => book.shelf === shelf)
+      }));
 
-      this.setState({
-        shelves: [
-          {
-            shelf: 'currentlyReading',
-            title: 'Currently Reading',
-            books: response.filter(book => book.shelf === 'currentlyReading')
-          },
-          {
-            shelf: 'wantToRead',
-            title: 'Want to Read',
-            books: response.filter(book => book.shelf === 'wantToRead')
-          },
-          {
-            shelf: 'read',
-            title: 'Read',
-            books: response.filter(book => book.shelf === 'read')
-          }
-        ]
-      });
+      this.setState({ shelves });
     });
   }
 

@@ -1,49 +1,49 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Book from './Book';
 import * as BooksAPI from './BooksAPI';
+import PropTypes from 'prop-types';
 
-class Shelf extends Component {
+const Shelf = (props) => {
 
-  constructor(props) {
-    super(props);
-
-    this.updateBook = this.updateBook.bind(this);
-  }
-
-  updateBook(value, book) {
+  const updateBook = (value, book) => {
     if (book.shelf === value) {
       return;
     }
 
     BooksAPI.update(book, value)
       .then(() => {
-        this.props.fetchBooks();
+        props.fetchBooks();
       });
   }
 
-  render() {
-    const { title, books, shelf } = this.props;
+  const { title, books, shelf } = props;
 
-    return (
-      <div className="bookshelf">
-        <h2 className="bookshelf-title">
-          {title}
-        </h2>
-        <div className="bookshelf-books">
-          <ol className="books-grid">
-            {books.map(book => (
-              <Book
-                book={book}
-                key={book.title}
-                updateBook={this.updateBook}
-                shelf={shelf}
-              />
-            ))}
-          </ol>
-        </div>
+  return (
+    <div className="bookshelf">
+      <h2 className="bookshelf-title">
+        {title}
+      </h2>
+      <div className="bookshelf-books">
+        <ol className="books-grid">
+          {books.map(book => (
+            <Book
+              book={book}
+              key={book.title}
+              updateBook={updateBook}
+              shelf={shelf}
+            />
+          ))}
+        </ol>
       </div>
-    )
-  }
+    </div>
+  )
+}
+
+Shelf.propTypes = {
+  title: PropTypes.string,
+  books: PropTypes.array.isRequired,
+  shelf: PropTypes.string,
+  fetchBooks: PropTypes.func.isRequired
 }
 
 export default Shelf;
