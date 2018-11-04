@@ -6,7 +6,7 @@ import titleCase from './helpers/titleCase';
 class Book extends Component {
 
   state = {
-    shelf: this.props.shelf,
+    shelf: "none",
   }
 
   // this is used to clear memory leaks in BooksAPI.get
@@ -28,6 +28,8 @@ class Book extends Component {
   componentDidMount() {
     this.mounted = true;
 
+    // The shelf does not get returned as part of the getAll() or search() response.
+    // So to get the shelf of a book we need to look up this book specifically
     BooksAPI.get(this.props.book.id).then(response => {
       if (response.shelf && this.mounted) {
         this.setState({
@@ -46,6 +48,7 @@ class Book extends Component {
   render() {
     const { book } = this.props;
 
+    // the options for the dropdown list
     const options = [
       'currentlyReading',
       'wantToRead',
@@ -91,8 +94,7 @@ class Book extends Component {
 
 Book.propTypes = {
   book: PropTypes.object.isRequired,
-  updateBook: PropTypes.func.isRequired,
-  shelf: PropTypes.string.isRequired
+  updateBook: PropTypes.func.isRequired
 }
 
 export default Book;

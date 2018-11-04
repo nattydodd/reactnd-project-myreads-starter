@@ -25,6 +25,7 @@ class Search extends Component {
     });
 
     BooksAPI.search(e.target.value).then(response => {
+      // Get search results, and once finished set Searching state to false
       this.setState({
         results: !response || response.error ? [] : response,
         isSearching: false
@@ -33,10 +34,12 @@ class Search extends Component {
   }
 
   updateBook(value, book) {
+    // if there is no change in the update value, then do nothing
     if (book.shelf === value) {
       return;
     }
 
+    // otherwise update the book's shelf
     BooksAPI.update(book, value);
   }
 
@@ -59,17 +62,19 @@ class Search extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
+            {/* if the search is in progress */}
             {isSearching ?
               <h1>Searching...</h1> :
+              // if the search is finished and we have results:
               (results.length > 0 ?
                 results.map(book => (
                   <Book
                     book={book}
                     key={book.id}
                     updateBook={this.updateBook}
-                    shelf="none"
                   />
                 )) :
+                // if the search is finished but we have no results:
                 results.length === 0 ?
                   term === "" ?
                     <h1>Please enter your search query</h1> :

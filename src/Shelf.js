@@ -16,7 +16,7 @@ const Shelf = (props) => {
       });
   }
 
-  const { title, books, shelf } = props;
+  const { title, books } = props;
 
   return (
     <div className="bookshelf">
@@ -30,7 +30,6 @@ const Shelf = (props) => {
               book={book}
               key={book.title}
               updateBook={updateBook}
-              shelf={shelf}
             />
           ))}
         </ol>
@@ -42,7 +41,6 @@ const Shelf = (props) => {
 Shelf.propTypes = {
   title: PropTypes.string,
   books: PropTypes.array.isRequired,
-  shelf: PropTypes.string,
   fetchBooks: PropTypes.func.isRequired
 }
 

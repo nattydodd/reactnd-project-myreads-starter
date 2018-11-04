@@ -14,6 +14,8 @@ class Main extends Component {
   }
 
   fetchBooks() {
+    // fetch the books and sort them into shelves
+    // Attach properties to each shelf (title, shelf name and list of books)
     BooksAPI.getAll().then((response) => {
       const shelves = ['currentlyReading', 'wantToRead', 'read'].map(shelf => ({
         shelf: shelf,
@@ -41,7 +43,6 @@ class Main extends Component {
               <Shelf
                 title={shelf.title}
                 books={shelf.books}
-                shelf={shelf.shelf}
                 key={shelf.title}
                 fetchBooks={this.fetchBooks}
               />
